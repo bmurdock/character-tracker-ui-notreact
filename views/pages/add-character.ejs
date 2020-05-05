@@ -16,14 +16,28 @@
             <h1>Add Character</h1>
             <form id="addForm">
                 <p>Name: <input name='name' /></p>
-                <p>Class: <input name='class' /></p>
-                <p>Level: <input name='class' /></p>
-                <p>Background: <input name='class' /></p>
-                <p>Player: <input name='class' /></p>
-                <p>Race: <input name='class' /></p>
-                <p>Alignment: <input name='class' /></p>
-                <p>Level: <input name='class' /></p>
-                <input id="submitBtn" type="submit" value="submit" />
+                <p>Class:
+                    <select name="characterClass">
+                        <option value="">Choose a class...</option>
+                        <% classes.forEach(function(item) { %>
+                        <option value="<%= item._id  %>"><%= item.name  %></option>
+                        <% }) %>
+                    </select>
+                </p>
+                <p>Level: <input name='level' /></p>
+                <p>Background: <input name='background' /></p>
+                <p>Player: <input name='playerName' /></p>
+                <p>Race:
+                    <select name="race">
+                        <option value="">Choose a race...</option>
+                        <% races.forEach(function(item) { %>
+                        <option value="<%= item._id  %>"><%= item.name  %></option>
+                        <% }) %>
+                    </select>
+                </p>
+                <p>Alignment: <input name='alignment' /></p>
+                <p>Level: <input name='level' /></p>
+                <input id="submitBtn" type="submit" value="Submit" />
             </form>
         </div>
     </main>
@@ -32,10 +46,39 @@
         <%- include ('../components/footer') %>
     </footer>
     <script type="text/javascript">
+        // define our form element
         const form = document.getElementById('addForm');
 
+        // handle the form submit event
         form.addEventListener('submit', (event) => {
+            // prevent the form submit event from doing anything
+            // (we basically want to stop the NORMAL submit event)
             event.preventDefault();
+
+            // find all of the form inputs (document.querySelectorAll('input'))
+            // and at the same time convert them to an array (using slice)
+            const inputs = [].slice.call(document.querySelectorAll("input"))
+
+            // do the same with the form selects (dropdowns)
+            const selects = [].slice.call(document.querySelectorAll("select"))
+
+            // create a new object to hold the data we plan to submit
+            const submitData = {};
+
+            // add properties to the object for each of the form inputs
+            inputs.forEach((input) => {
+                // submitData is an object, but we use [brackets] to
+                //define properties when those properties are held in variables
+                submitData[input.name] = input.value;
+            });
+
+            selects.forEach((select) => {
+                submitData[select.name] = select.value;
+            });
+
+            // now we have our data in the submitData object
+            // we just need to send that data to our API!
+
         });
     </script>
 
