@@ -36,7 +36,7 @@
                     </select>
                 </p>
                 <p>Alignment: <input name='alignment' /></p>
-                <p>Level: <input name='level' /></p>
+                <p>Experience: <input name='experience' /></p>
                 <input id="submitBtn" type="submit" value="Submit" />
             </form>
         </div>
@@ -78,7 +78,33 @@
 
             // now we have our data in the submitData object
             // we just need to send that data to our API!
+            console.log('What I am sending: ', submitData);
+            // we cannot use the default fetch options
+            // so we specify our own
+            const fetchOptions = {
+                // the method has to match the method of our api route
+                method: 'POST',
+                // we are sending json so we have to tell it that
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                // this is the actual data we are sending
+                // it needs to be a string
+                body: JSON.stringify(submitData),
+            };
 
+            // send the data
+            fetch('http://localhost:3333/api/characters', fetchOptions)
+                .then((response) => {
+                    console.log('potential error: ', response);
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log('submission data: ', data);
+                })
+                .catch((err) => {
+                    console.log('there was a fetch error: ', err);
+                })
         });
     </script>
 
